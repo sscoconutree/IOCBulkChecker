@@ -134,6 +134,23 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 listItem.style.color = 'green';
             }
+        } else if (result.type === 'URL') {
+            if (result.error) {
+
+                listItem.textContent = `${result.error}`;
+                listItem.style.color = 'gray';
+            } else if (result.result) {
+                const URLdata = result.result.data;
+                const URLdetection = URLdata.attributes.last_analysis_stats.malicious;
+    
+                listItem.textContent = `URL: ${URLdata.attributes.url} - ${URLdetection} security vendors flagged this URL as malicious`;
+    
+                if (URLdetection > 0) {
+                    listItem.style.color = 'red';
+                } else {
+                    listItem.style.color = 'green';
+                }
+            }
         }
         
         analysisResultContainer.appendChild(listItem);
