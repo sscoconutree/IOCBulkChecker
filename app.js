@@ -4,8 +4,8 @@ const base64url = require('base64url');
 const { sleep, isIPv4Address, isIPv6Address, isHash, isURL } = require('./helpers');
 
 const app = express();
-const vt_api = 'VT_API_KEY'; // INSERT VIRUSTOTAL API KEY
-const ab_api = 'ABUSEIPDB_API_KEY'; // INSERT ABUSEIPDB API KEY
+const vt_api = 'VT_API_KEY'; // INSERT YOUR VirusTotal API KEY HERE
+const ab_api = 'ABUSEIPDB_API_KEY'; // INSERT YOUR AbuseIPDB API KEY HERE
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -86,7 +86,7 @@ app.post('/checkEntries', async (req, res) => {
                     const data = await response.json();
                     res.write(JSON.stringify({ type: 'URL', entry: input_url, result: data }) + '\n');
                      
-                } else if (!response.ok || response.status(500) || response.status(404) || response.status(429)) {
+                } else if (!response.ok) {
                     
                     const data = await response.json();
                     res.write(JSON.stringify({ type: 'URLerror', entry: input_url, result: data }) + '\n');
