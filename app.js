@@ -1,10 +1,11 @@
 const express = require('express');
 const fetch = require('node-fetch');
-const { sleep, isIPv4Address, isIPv6Address, isHash } = require('./helpers');
+const base64url = require('base64url');
+const { sleep, isIPv4Address, isIPv6Address, isHash, isURL } = require('./helpers');
 
 const app = express();
-const vt_api = 'VT_API_KEY'; // VirusTotal API KEY
-const ab_api = 'AB_API_KEY'; // AbuseIPDB API KEY
+const vt_api = 'VT_API_KEY'; // VirusTotal API Key
+const ab_api = 'AbuseIPDB_API_KEY'; // AbuseIPDB API Key
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -70,6 +71,35 @@ app.post('/checkEntries', async (req, res) => {
             }
         }
 
+        if (isURL(trimmedEntry) && !isIPv6Address(trimmedEntry) && !isIPv4Address(trimmedEntry) && !isHash(trimmedEntry)) {
+            const input_url = trimmedEntry;
+            const url_id = base64url(input_url);
+        
+            try {
+                const response = await fetch(`https://www.virustotal.com/api/v3/urls/${url_id}`, {
+                    headers: {
+                        'x-apikey': vt_api
+                    }
+                });
+            
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData.error && errorData.error.code === 'NotFoundError') {
+
+                        throw new Error(`URL not found: ${input_url}`);
+                    } else {
+                        throw new Error(`Error response from VirusTotal API: ${response.status} ${response.statusText}`);
+                    }
+                }
+            
+                const data = await response.json();
+                res.write(JSON.stringify({ type: 'URL', entry: input_url, result: data }) + '\n');
+            } catch (error) {
+                res.write(JSON.stringify({ type: 'URL', entry: input_url, error: `No records found for the URL: "${input_url}"` }) + '\n');
+            }
+        }
+        
+        
         if (!isIPv4Address(trimmedEntry) && !isIPv6Address(trimmedEntry) && isHash(trimmedEntry)) {
             
             const hash = trimmedEntry;
