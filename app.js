@@ -3,8 +3,8 @@ const fetch = require('node-fetch');
 const { sleep, isIPv4Address, isIPv6Address, isHash } = require('./helpers');
 
 const app = express();
-const vt_api = '5825f4fc8fba52674f640f126a1ff538f5cb0c87553ee2e662cd916d4fab037d';
-const ab_api = '981ec3e0f36f48edc2e70497544f6969e48850da0d25cab031553cdcf45087fd8e0b99a836cfbbad';
+const vt_api = 'VT_API_KEY'; // VirusTotal API KEY
+const ab_api = 'AB_API_KEY'; // AbuseIPDB API KEY
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
