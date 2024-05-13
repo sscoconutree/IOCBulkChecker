@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ entries: uniqueLines })
             });
 
-            if (!response.ok) {
+            if (!response.ok && response.status(500) && response.status(404) && response.status(429)) {
                 throw new Error(`Server returned ${response.status}`);
             }
 
@@ -135,23 +135,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 listItem.style.color = 'green';
             }
         } else if (result.type === 'URL') {
-            if (result.error) {
-
-                listItem.textContent = `${result.error}`;
-                listItem.style.color = 'gray';
-            } else if (result.result) {
-                const URLdata = result.result.data;
-                const URLdetection = URLdata.attributes.last_analysis_stats.malicious;
+        
+            const URLdata = result.result.data;
+            const URLdetection = URLdata.attributes.last_analysis_stats.malicious;
     
-                listItem.textContent = `URL: ${URLdata.attributes.url} - ${URLdetection} security vendors flagged this URL as malicious`;
+            listItem.textContent = `URL: ${URLdata.attributes.url} - ${URLdetection} security vendors flagged this URL as malicious`;
     
-                if (URLdetection > 0) {
+            if (URLdetection > 0) {
                     listItem.style.color = 'red';
                 } else {
                     listItem.style.color = 'green';
-                }
             }
+          
+        } else if (result.type === 'URLerror') {
+            const URLerror = result.result; 
+        
+            if (URLerror.error && URLerror.error.code === 'NotFoundError') {
+                const errorMessage = URLerror.error.message;
+                
+                const base64EncodedString = errorMessage.split(' ')[1].replace(/"/g, ''); 
+                
+                const decodedMessage = atob(base64EncodedString);
+        
+                listItem.textContent = `URL not found: "${decodedMessage}"`;
+                listItem.style.color = 'gray';
+            } 
         }
+        
         
         analysisResultContainer.appendChild(listItem);
     }
