@@ -12,6 +12,11 @@ function isIPv6Address(input) {
     return ipv6Regex.test(input);
 }
 
+function isURL(input) {
+    const URLregex = /^(?:https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)$/;
+    return URLregex.test(input);
+}
+
 function isHash(input) {
     
     const hashLength = input.length;
@@ -27,5 +32,6 @@ module.exports = {
     sleep,
     isIPv4Address,
     isIPv6Address,
+    isURL,
     isHash
 };
