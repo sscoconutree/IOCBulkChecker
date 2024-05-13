@@ -1,11 +1,11 @@
 const express = require('express');
 const fetch = require('node-fetch');
 const base64url = require('base64url');
-const { sleep, isIPv4Address, isIPv6Address, isHash, isURL } = require('./helpers');
+const { sleep, isIPv4Address, isIPv6Address, isHash, isURL, isDomain } = require('./helpers');
 
 const app = express();
-const vt_api = 'VT_API_KEY'; // INSERT YOUR VirusTotal API KEY HERE
-const ab_api = 'ABUSEIPDB_API_KEY'; // INSERT YOUR AbuseIPDB API KEY HERE
+const vt_api = 'VT_KEY_API'; // PUT YOUR VirusTotal API KEY HERE!
+const ab_api = 'ABUSEIPDB_API_KEY'; // PUT YOUR AbuseIPDB API KEY HERE!
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -96,7 +96,33 @@ app.post('/checkEntries', async (req, res) => {
                 res.write(JSON.stringify({ type: 'URL', entry: input_url, error: `No records found for the URL: "${input_url}"` }) + '\n');
             }
         }
+
+        if (isDomain(trimmedEntry) && !isURL(trimmedEntry) && !isIPv6Address(trimmedEntry) && !isIPv4Address(trimmedEntry) && !isHash(trimmedEntry)) {
+
+            const domain = trimmedEntry;
+
+            try {
+                const response = await fetch(`https://www.virustotal.com/api/v3/domains/${domain}`, {
+                    headers: {
+                        'x-apikey': vt_api
+                    }
+                });
         
+                if (response.ok) {
+                    const data = await response.json();
+                    res.write(JSON.stringify({ type: 'Domain', entry: domain, result: data }) + '\n');
+                     
+                } else if (!response.ok) {
+                    
+                    const data = await response.json();
+                    res.write(JSON.stringify({ type: 'Domainerror', entry: domain, result: data }) + '\n');
+                }
+            
+            } catch (error) {
+                res.write(JSON.stringify({ type: 'Domain', entry: domain, error: `No records found for the domain: "${domain}"` }) + '\n');
+            }
+
+        }
         
         
         if (!isIPv4Address(trimmedEntry) && !isIPv6Address(trimmedEntry) && isHash(trimmedEntry)) {
