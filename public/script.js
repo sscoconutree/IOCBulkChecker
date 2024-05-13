@@ -160,6 +160,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 listItem.textContent = `URL not found: "${decodedMessage}"`;
                 listItem.style.color = 'gray';
             } 
+
+        } else if (result.type === 'Domain') {
+
+            const Domaindata = result.result.data;
+            const Domaindetection = Domaindata.attributes.last_analysis_stats.malicious;
+
+            listItem.textContent = `Domain: ${Domaindata.id} - ${Domaindetection} security vendors flagged this domain as malicious`;
+
+            if (Domaindetection > 0) {
+                listItem.style.color = 'red';
+            } else {
+                listItem.style.color = 'green';
+            }
+
+        } else if (result.type === 'Domainerror') {
+
+            const Domainerror = result.result;
+
+            if (Domainerror.error && Domainerror.error.code === 'InvalidArgumentError') {
+                const Domainerrmessage = Domainerror.error.message;
+
+                const matches = Domainerrmessage.match(/"b'(.*?)'"/);
+                let domain = '';
+
+                if (matches && matches.length > 1) {
+                    domain = matches[1]; 
+                }
+
+                listItem.textContent = `Domain not found: "${domain}"`;
+                listItem.style.color = 'gray';
+
+            }
         }
         
         
