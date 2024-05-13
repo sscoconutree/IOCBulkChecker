@@ -1,7 +1,7 @@
 # IOCBulkChecker
 GUI-based bulk IOC tool checker that supports VirusTotal and AbuseIPDB API.
 
-This is an improved version of previous bulk analysis tools from this repository as it supports analysis of **IPv4**, **IPv6**, ** URLs** and **Hash (MD5, SHA-1, SHA-256)**.
+This is an improved version of previous bulk analysis tools from this repository as it supports analysis of **IPv4**, **IPv6**, **URLs** and **Hash (MD5, SHA-1, SHA-256)**.
 Due to some API key limitations (e.g. VirusTotal) there's a sleep timer in between the scans per hashes.
 
 ![image](https://github.com/sscoconutree/IOCBulkChecker/assets/59388557/45de7493-ecab-4c6c-b226-35d25caea78b)
