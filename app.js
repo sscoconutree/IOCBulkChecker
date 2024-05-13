@@ -4,8 +4,8 @@ const base64url = require('base64url');
 const { sleep, isIPv4Address, isIPv6Address, isHash, isURL } = require('./helpers');
 
 const app = express();
-const vt_api = 'VT_API_KEY'; // VirusTotal API Key
-const ab_api = 'AbuseIPDB_API_KEY'; // AbuseIPDB API Key
+const vt_api = 'VT_API_KEY'; // INSERT VIRUSTOTAL API KEY
+const ab_api = 'ABUSEIPDB_API_KEY'; // INSERT ABUSEIPDB API KEY
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -81,23 +81,22 @@ app.post('/checkEntries', async (req, res) => {
                         'x-apikey': vt_api
                     }
                 });
-            
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    if (errorData.error && errorData.error.code === 'NotFoundError') {
-
-                        throw new Error(`URL not found: ${input_url}`);
-                    } else {
-                        throw new Error(`Error response from VirusTotal API: ${response.status} ${response.statusText}`);
-                    }
+        
+                if (response.ok) {
+                    const data = await response.json();
+                    res.write(JSON.stringify({ type: 'URL', entry: input_url, result: data }) + '\n');
+                     
+                } else if (!response.ok || response.status(500) || response.status(404) || response.status(429)) {
+                    
+                    const data = await response.json();
+                    res.write(JSON.stringify({ type: 'URLerror', entry: input_url, result: data }) + '\n');
                 }
             
-                const data = await response.json();
-                res.write(JSON.stringify({ type: 'URL', entry: input_url, result: data }) + '\n');
             } catch (error) {
                 res.write(JSON.stringify({ type: 'URL', entry: input_url, error: `No records found for the URL: "${input_url}"` }) + '\n');
             }
         }
+        
         
         
         if (!isIPv4Address(trimmedEntry) && !isIPv6Address(trimmedEntry) && isHash(trimmedEntry)) {
