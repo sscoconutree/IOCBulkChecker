@@ -18,7 +18,7 @@ function isURL(input) {
 }
 
 function isDomain(input) {
-    const domainRegex = /^(?!www\.)(?!https?:\/\/)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,6}$/;
+    const domainRegex = /^(?!www\.)(?!https?:\/\/)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,6}(\/.*)?$/;
     return domainRegex.test(input);
 }
 
