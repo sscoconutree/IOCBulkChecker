@@ -13,7 +13,7 @@ function isIPv6Address(input) {
 }
 
 function isURL(input) {
-    const URLregex = /^(https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,255}\.[a-zA-Z0-9()]{2,24}(\/[-a-zA-Z0-9()~`!@#$%^&*()\-_+={[}\]|:;"'<,>.?\/%]*)?$/;
+    const URLregex = /^(https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,255}\.[a-zA-Z0-9()]{2,24}(\/[-a-zA-Z0-9()~`!@#$%^&*()\-_+={[}\]|:;"'<,>.?\/%]*)?(#[\-a-zA-Z0-9()~`!@#$%^&*()\-_+={[}\]|:;"'<,>.?\/%]*)?$/;
     return URLregex.test(input);
 }
 
