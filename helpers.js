@@ -13,12 +13,12 @@ function isIPv6Address(input) {
 }
 
 function isURL(input) {
-    const URLregex = /^((https?:\/\/)|(www\.))[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)$/;
+    const URLregex = /^(https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)$/;
     return URLregex.test(input);
 }
 
 function isDomain(input) {
-    const domainRegex = /^(?!www\.)(?!https?:\/\/)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,6}(\/.*)?$/;
+    const domainRegex = /^(www\.)?([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,6}(\/.*)?$/;
     return domainRegex.test(input);
 }
 
