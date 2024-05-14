@@ -177,9 +177,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (result.type === 'Domainerror') {
 
             const Domainerror = result.result;
+            const object = result.entry;
+            const Domainerrmessage = Domainerror.error.message;
 
             if (Domainerror.error && Domainerror.error.code === 'InvalidArgumentError') {
-                const Domainerrmessage = Domainerror.error.message;
 
                 const matches = Domainerrmessage.match(/"b'(.*?)'"/);
                 let domain = '';
@@ -189,6 +190,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 listItem.textContent = `Domain not found: "${domain}"`;
+                listItem.style.color = 'gray';
+
+            } else if (Domainerror.error && Domainerror.error.code === 'NotFoundError') {
+
+                listItem.textContent = `Not a valid domain: "${object}"`;
                 listItem.style.color = 'gray';
 
             }
