@@ -18,7 +18,7 @@ function isURL(input) {
 }
 
 function isDomain(input) {
-    const domainRegex = /^(www\.)?([a-zA-Z0-9-]{1,255}\.)+[a-zA-Z]{2,24}(\/[-a-zA-Z0-9()~`!@#$%^&*()\-_+={[}\]|:;"'<,>.?\/]{0,1024})?$/;
+    const domainRegex = /^(www\.)?([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,6}(\/.*)?$/;
     return domainRegex.test(input);
 }
 
