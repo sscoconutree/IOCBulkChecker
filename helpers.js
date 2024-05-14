@@ -24,6 +24,12 @@ function isDomain(input) {
 
 
 function isHash(input) {
+
+    const forbiddenSymbols = /[~`!@#$%^&*()\-_=+{}\[\]|\\:;"',<.>/?]/;
+
+    if (forbiddenSymbols.test(input)) {
+        return false;
+    }
     
     const hashLength = input.length;
 
@@ -33,6 +39,7 @@ function isHash(input) {
         return false; 
     }
 }
+
 
 module.exports = {
     sleep,
