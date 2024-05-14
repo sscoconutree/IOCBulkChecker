@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } else if (Domainerror.error && Domainerror.error.code === 'NotFoundError') {
 
-                listItem.textContent = `Not a valid domain: "${object}"`;
+                listItem.textContent = `Domain not found: "${object}"`;
                 listItem.style.color = 'gray';
 
             }
