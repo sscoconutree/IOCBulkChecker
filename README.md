@@ -17,7 +17,7 @@ Due to some API key limitations (e.g. VirusTotal) there's a sleep timer in betwe
 # CHANGELOGS
 
 <h3>v1.1</h3>
-* Fixed URL analysis by performing POST request to the server first before proceeding with the GET request for the report.
+* Fixed URL analysis by performing POST request to the server first before proceeding with the GET request for the report to ensure flexibility of URL inputs for analysis.
 
 <h3>v1.0</h3>
 * First release.
