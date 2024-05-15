@@ -4,8 +4,8 @@ const base64url = require('base64url');
 const { sleep, isIPv4Address, isIPv6Address, isHash, isURL, isDomain } = require('./helpers');
 
 const app = express();
-const vt_api = 'VT_KEY_API'; // PUT YOUR VirusTotal API KEY HERE!
-const ab_api = 'ABUSEIPDB_API_KEY'; // PUT YOUR AbuseIPDB API KEY HERE!
+const vt_api = 'VT_API_KEY'; // PUT YOUR VirusTotal API KEY HERE
+const ab_api = 'ABUSEIPDB_API_KEY'; // PUT YOUR AbuseIPDB API KEY HERE
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -74,28 +74,51 @@ app.post('/checkEntries', async (req, res) => {
         if (isURL(trimmedEntry) && !isIPv6Address(trimmedEntry) && !isIPv4Address(trimmedEntry) && !isHash(trimmedEntry)) {
             const input_url = trimmedEntry;
             const url_id = base64url(input_url);
-        
+            
+            const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+            
             try {
-                const response = await fetch(`https://www.virustotal.com/api/v3/urls/${url_id}`, {
+                const vt_response = await fetch('https://www.virustotal.com/api/v3/urls', {
+                    method: 'POST',
                     headers: {
-                        'x-apikey': vt_api
-                    }
+                        'x-apikey': vt_api,
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        url: input_url,
+                    }),
                 });
         
-                if (response.ok) {
-                    const data = await response.json();
-                    res.write(JSON.stringify({ type: 'URL', entry: input_url, result: data }) + '\n');
-                     
-                } else if (!response.ok) {
-                    
-                    const data = await response.json();
-                    res.write(JSON.stringify({ type: 'URLerror', entry: input_url, result: data }) + '\n');
+                if (vt_response.ok) {
+
+                    await sleep(7500);
+        
+                    try {
+                        const response = await fetch(`https://www.virustotal.com/api/v3/urls/${url_id}`, {
+                            headers: {
+                                'x-apikey': vt_api,
+                            },
+                        });
+        
+                        if (response.ok) {
+                            const data = await response.json();
+                            res.write(JSON.stringify({ type: 'URL', entry: input_url, result: data }) + '\n');
+                        } else {
+                            const data = await response.json();
+                            res.write(JSON.stringify({ type: 'URLerror', entry: input_url, result: data }) + '\n');
+                        }
+                    } catch (error) {
+                        res.write(JSON.stringify({ type: 'URL', entry: input_url, error: `Error fetching scan results for URL: "${input_url}"` }) + '\n');
+                    }
+                } else {
+                    const vt_data = await vt_response.json();
+                    res.write(JSON.stringify({ type: 'URL', entry: input_url, error: `Error submitting URL to VirusTotal: ${vt_data.error.message}` }) + '\n');
                 }
-            
             } catch (error) {
-                res.write(JSON.stringify({ type: 'URL', entry: input_url, error: `No records found for the URL: "${input_url}"` }) + '\n');
+                res.write(JSON.stringify({ type: 'URL', entry: input_url, error: `Error submitting URL to VirusTotal: ${error.message}` }) + '\n');
             }
         }
+                
 
         if (isDomain(trimmedEntry) && !isURL(trimmedEntry) && !isIPv6Address(trimmedEntry) && !isIPv4Address(trimmedEntry) && !isHash(trimmedEntry)) {
 
