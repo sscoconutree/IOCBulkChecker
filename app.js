@@ -182,12 +182,12 @@ app.post('/checkEntries', async (req, res) => {
                 } else {
                     status = 'Clean';
                 }
-
                 const formattedResult = {
                     hash: hash,
                     type: hashType,
                     status: status,
                     enginesDetected: enginesDetected
+                    
                 };
 
                 res.write(JSON.stringify({ type: 'Hash', entry: hash, result: formattedResult }) + '\n');
