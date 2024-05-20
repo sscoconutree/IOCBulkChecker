@@ -103,10 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (result.type === 'Hash') {
             if (result.result.status === 'Malicious') {
-                listItem.textContent = `Hash: ${result.result.hash} (${result.result.type}) - ${result.result.enginesDetected} security vendors flagged this file as malicious`;
+                listItem.textContent = `Hash: ${result.result.hash} (${result.result.type}) - ${result.result.enginesDetected} security vendors flagged this file as malicious - https://www.virustotal.com/gui/file/${result.result.hash}`;
                 listItem.style.color = 'red';
             } else if (result.result.status === 'Clean') {
-                listItem.textContent = `Hash: ${result.result.hash} (${result.result.type}) - Clean`;
+                listItem.textContent = `Hash: ${result.result.hash} (${result.result.type}) - Clean - - https://www.virustotal.com/gui/file/${result.result.hash}`;
                 listItem.style.color = 'green';
             } else {
                 listItem.textContent = `Hash: ${result.result.hash} (${result.result.type}) - No matches found`;
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const ipv4Data = result.result.data;
             const ipv4Detection = ipv4Data.attributes.last_analysis_stats.malicious;
 
-            listItem.textContent = `IPv4 Address: ${ipv4Data.id} - ${ipv4Detection} security vendors flagged this IP address as malicious`;
+            listItem.textContent = `IPv4 Address: ${ipv4Data.id} - ${ipv4Detection} security vendors flagged this IP address as malicious. - https://www.virustotal.com/gui/ip-address/${ipv4Data.id}`;
 
             if (ipv4Detection > 0) {
                 listItem.style.color = 'red';
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const ipv6Data = result.result;
             const abuseConfidenceScore = ipv6Data.data.abuseConfidenceScore;
-            listItem.textContent = `IPv6 Address: ${ipv6Data.data.ipAddress} - Abuse Confidence Score: ${abuseConfidenceScore}%`;
+            listItem.textContent = `IPv6 Address: ${ipv6Data.data.ipAddress} - Abuse Confidence Score: ${abuseConfidenceScore}% - https://www.abuseipdb.com/check/${ipv6Data.data.ipAddress}`;
 
             if (abuseConfidenceScore > 0) {
                 listItem.style.color = 'red';
@@ -138,8 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
             const URLdata = result.result.data;
             const URLdetection = URLdata.attributes.last_analysis_stats.malicious;
+            URLid = URLdata.id;
     
-            listItem.textContent = `URL: ${URLdata.attributes.url} - ${URLdetection} security vendors flagged this URL as malicious`;
+            listItem.textContent = `URL: ${URLdata.attributes.url} - ${URLdetection} security vendors flagged this URL as malicious - https://www.virustotal.com/gui/url/${URLid}`;
     
             if (URLdetection > 0) {
                     listItem.style.color = 'red';
@@ -166,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const Domaindata = result.result.data;
             const Domaindetection = Domaindata.attributes.last_analysis_stats.malicious;
 
-            listItem.textContent = `Domain: ${Domaindata.id} - ${Domaindetection} security vendors flagged this domain as malicious`;
+            listItem.textContent = `Domain: ${Domaindata.id} - ${Domaindetection} security vendors flagged this domain as malicious - https://www.virustotal.com/gui/domain/${Domaindata.id}`;
 
             if (Domaindetection > 0) {
                 listItem.style.color = 'red';
