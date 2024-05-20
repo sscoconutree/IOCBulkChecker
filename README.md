@@ -16,6 +16,9 @@ Due to some API key limitations (e.g. VirusTotal) there's a sleep timer in betwe
 
 # CHANGELOGS
 
+<h3>v1.2</h3>
+* Added direct link report of IOCs on VirusTotal and AbuseIPDB in the output.
+
 <h3>v1.1</h3>
 * Fixed URL analysis by performing POST request to the server first before proceeding with the GET request to retrieve the report. This is to ensure flexibility of URL inputs for analysis.
 
