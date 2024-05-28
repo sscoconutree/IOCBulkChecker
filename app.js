@@ -91,7 +91,7 @@ app.post('/checkEntries', async (req, res) => {
         
                 if (vt_response.ok) {
 
-                    await sleep(8500);
+                    await sleep(10000);
         
                     try {
                         const response = await fetch(`https://www.virustotal.com/api/v3/urls/${url_id}`, {
