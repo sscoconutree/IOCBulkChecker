@@ -4,8 +4,8 @@ const base64url = require('base64url');
 const { sleep, isIPv4Address, isIPv6Address, isHash, isURL, isDomain } = require('./helpers');
 
 const app = express();
-const vt_api = '723a6f400cc6656c7e095e68165cd9b6bb42773a83faef359512a353785903b3'; // PUT YOUR VirusTotal API KEY HERE
-const ab_api = '981ec3e0f36f48edc2e70497544f6969e48850da0d25cab031553cdcf45087fd8e0b99a836cfbbad'; // PUT YOUR AbuseIPDB API KEY HERE
+const vt_api = 'API_KEY_HERE'; // PUT YOUR VirusTotal API KEY HERE
+const ab_api = 'API_KEY_HERE'; // PUT YOUR AbuseIPDB API KEY HERE
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
